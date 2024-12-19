@@ -31,15 +31,24 @@ namespace Project1 {
             this->btn8->Click += gcnew System::EventHandler(this, &MyForm::numberButton_Click);
             this->btn9->Click += gcnew System::EventHandler(this, &MyForm::numberButton_Click);
 
+
             // Menghubungkan event handler ke tombol operasi
             this->btnPlus->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
             this->btnMinus->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
             this->btnMultiply->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
             this->btnDivide->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
+            this->SinBtn->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
+            this->CosBtn->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
+            this->TanBtn->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
 
             // Menghubungkan event handler untuk tombol "=" dan "C"
             this->btnEqual->Click += gcnew System::EventHandler(this, &MyForm::equalButton_Click);
             this->btnClear->Click += gcnew System::EventHandler(this, &MyForm::clearButton_Click);
+
+            // Menghubungkan event handler ke tombol-tombol Trigonometri
+            this->SinBtn->Click += gcnew System::EventHandler(this, &MyForm::Trigonometri_Click);
+            this->CosBtn->Click += gcnew System::EventHandler(this, &MyForm::Trigonometri_Click);
+            this->TanBtn->Click += gcnew System::EventHandler(this, &MyForm::Trigonometri_Click);
         }
 
     protected:
@@ -56,6 +65,8 @@ namespace Project1 {
         double secondnumber;
         String^ operation;
         String^ firstchar;
+        String^ trigonometri;
+
     private: System::Windows::Forms::Button^ btnClear;
     private: System::Windows::Forms::Button^ btnEqual;
     private: System::Windows::Forms::Button^ btnDivide;
@@ -76,7 +87,7 @@ namespace Project1 {
     private: System::Windows::Forms::Button^ SinBtn;
     private: System::Windows::Forms::Button^ CosBtn;
     private: System::Windows::Forms::Button^ TanBtn;
-
+    
 
 
 
@@ -364,7 +375,6 @@ namespace Project1 {
             this->CosBtn->Size = System::Drawing::Size(50, 50);
             this->CosBtn->TabIndex = 18;
             this->CosBtn->Text = L"Cos";
-            this->CosBtn->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
             // 
             // TanBtn
             // 
@@ -492,7 +502,12 @@ private: System::Void operationButton_Click(System::Object^ sender, System::Even
      firstchar = displayBox->Text;
      operation = button->Text; // Simpan operasi
      displayBox->Text += " " + operation + " "; // Tampilkan operasi di displayBox
-     
+}
+
+private: System::Void Trigonometri_Click(System::Object^ sender, System::EventArgs^ e) {
+    Button^ button = safe_cast<Button^>(sender);
+    trigonometri = button->Text; // Simpan operasi
+    displayBox->Text += " " + trigonometri + " "; // Tampilkan operasi di displayBox
 }
 
 private: System::Void equalButton_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -664,13 +679,12 @@ private: System::Void clearButton_Click(System::Object^ sender, System::EventArg
     operation = "";
 }
 
-private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
-}
 private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
 }
+
 };
 }
