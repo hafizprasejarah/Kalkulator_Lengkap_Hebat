@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <cstddef>
+#include <cmath>
+#include <corecrt_math_defines.h>
 
 
 namespace Project1 {
@@ -37,9 +39,7 @@ namespace Project1 {
             this->btnMinus->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
             this->btnMultiply->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
             this->btnDivide->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
-            this->SinBtn->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
-            this->CosBtn->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
-            this->TanBtn->Click += gcnew System::EventHandler(this, &MyForm::operationButton_Click);
+
 
             // Menghubungkan event handler untuk tombol "=" dan "C"
             this->btnEqual->Click += gcnew System::EventHandler(this, &MyForm::equalButton_Click);
@@ -49,6 +49,8 @@ namespace Project1 {
             this->SinBtn->Click += gcnew System::EventHandler(this, &MyForm::Trigonometri_Click);
             this->CosBtn->Click += gcnew System::EventHandler(this, &MyForm::Trigonometri_Click);
             this->TanBtn->Click += gcnew System::EventHandler(this, &MyForm::Trigonometri_Click);
+            this->InversBtn->Click += gcnew System::EventHandler(this, &MyForm::Trigonometri_Click);
+
         }
 
     protected:
@@ -92,7 +94,8 @@ namespace Project1 {
 
 
     private: System::Windows::Forms::Button^ button4;
-    private: System::Windows::Forms::Button^ button5;
+    private: System::Windows::Forms::Button^ InversBtn;
+
     private: System::Windows::Forms::Button^ button6;
     private: System::Windows::Forms::Button^ button7;
     private: System::Windows::Forms::Button^ button8;
@@ -175,7 +178,7 @@ namespace Project1 {
             this->CosBtn = (gcnew System::Windows::Forms::Button());
             this->TanBtn = (gcnew System::Windows::Forms::Button());
             this->button4 = (gcnew System::Windows::Forms::Button());
-            this->button5 = (gcnew System::Windows::Forms::Button());
+            this->InversBtn = (gcnew System::Windows::Forms::Button());
             this->button6 = (gcnew System::Windows::Forms::Button());
             this->button7 = (gcnew System::Windows::Forms::Button());
             this->button8 = (gcnew System::Windows::Forms::Button());
@@ -188,7 +191,7 @@ namespace Project1 {
             this->btnClear->BackColor = System::Drawing::Color::RosyBrown;
             this->btnClear->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 8, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(0)));
-            this->btnClear->Location = System::Drawing::Point(70, 293);
+            this->btnClear->Location = System::Drawing::Point(302, 289);
             this->btnClear->Name = L"btnClear";
             this->btnClear->Size = System::Drawing::Size(50, 50);
             this->btnClear->TabIndex = 16;
@@ -396,16 +399,15 @@ namespace Project1 {
             this->button4->TabIndex = 20;
             this->button4->Text = L"√";
             // 
-            // button5
+            // InversBtn
             // 
-            this->button5->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 8, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->InversBtn->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 8, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(0)));
-            this->button5->Location = System::Drawing::Point(302, 113);
-            this->button5->Name = L"button5";
-            this->button5->Size = System::Drawing::Size(50, 50);
-            this->button5->TabIndex = 21;
-            this->button5->Text = L"Inv";
-            this->button5->Click += gcnew System::EventHandler(this, &MyForm::button5_Click);
+            this->InversBtn->Location = System::Drawing::Point(302, 113);
+            this->InversBtn->Name = L"InversBtn";
+            this->InversBtn->Size = System::Drawing::Size(50, 50);
+            this->InversBtn->TabIndex = 21;
+            this->InversBtn->Text = L"Inv";
             // 
             // button6
             // 
@@ -432,11 +434,11 @@ namespace Project1 {
             // 
             this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 8, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(0)));
-            this->button8->Location = System::Drawing::Point(302, 289);
+            this->button8->Location = System::Drawing::Point(70, 293);
             this->button8->Name = L"button8";
             this->button8->Size = System::Drawing::Size(50, 50);
             this->button8->TabIndex = 24;
-            this->button8->Text = L"^";
+            this->button8->Text = L".";
             // 
             // panel1
             // 
@@ -444,7 +446,7 @@ namespace Project1 {
             this->panel1->Controls->Add(this->button8);
             this->panel1->Controls->Add(this->button7);
             this->panel1->Controls->Add(this->button6);
-            this->panel1->Controls->Add(this->button5);
+            this->panel1->Controls->Add(this->InversBtn);
             this->panel1->Controls->Add(this->button4);
             this->panel1->Controls->Add(this->TanBtn);
             this->panel1->Controls->Add(this->CosBtn);
@@ -472,6 +474,7 @@ namespace Project1 {
             this->panel1->Name = L"panel1";
             this->panel1->Size = System::Drawing::Size(360, 498);
             this->panel1->TabIndex = 17;
+            this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::panel1_Paint);
             // 
             // MyForm
             // 
@@ -506,14 +509,63 @@ private: System::Void operationButton_Click(System::Object^ sender, System::Even
 
 private: System::Void Trigonometri_Click(System::Object^ sender, System::EventArgs^ e) {
     Button^ button = safe_cast<Button^>(sender);
-    trigonometri = button->Text; // Simpan operasi
-    displayBox->Text += " " + trigonometri + " "; // Tampilkan operasi di displayBox
+    trigonometri = button->Text; // Simpan Trigonometri ke dalam variav
+    displayBox->Text += trigonometri + " "; // Tampilkan operasi di displayBox
+
 }
 
 private: System::Void equalButton_Click(System::Object^ sender, System::EventArgs^ e) {
-    // Ambil angka kedua setelah operasi
+    //Ambil dan pisahkan angka dan operasi dengan spasi (' ') dan menyimpannya sebagai array 
     array<String^>^ parts = displayBox->Text->Split(' ');
 
+    if (parts [0] == "Tan" || parts[0] == "Cos" || parts[0] == "Sin") {
+        if (parts->Length == 2 && parts[1] != "") {
+
+            double radian = Double::Parse(parts[1]) * M_PI / 180.0; //Rumus radian
+            double hasil;
+
+            if (parts[0] == "Sin") hasil = sin(radian);
+            else if (parts[0] == "Cos") hasil = cos(radian);
+            else if (parts[0] == "Tan") hasil = tan(radian);
+
+            displayBox->Text = hasil.ToString();
+
+            return;
+        }
+        else {
+            displayBox->Text = "Invalid Input";
+            return;
+        }
+
+    }
+    else if (parts[0] == "Inv") {
+        if (parts->Length == 3 && parts[2] != "")
+        {   
+            int derajat = Double::Parse(parts[2]);
+            double radian = derajat * M_PI / 180.0; //Rumus radian
+            double hasil;
+
+            if(derajat >= -1.0 && derajat <= 1.0){
+                if (parts[0] + parts[1] == "InvSin") hasil = asin(radian);
+                else if (parts[0] + parts[1] == "InvCos") hasil = acos(radian);
+                else if (parts[0] + parts[1] == "InvTan") hasil = atan(radian);
+                displayBox->Text = hasil.ToString();
+
+                return;
+            }
+            else {
+                displayBox->Text = "Invalid Input";
+                return;
+            }
+
+           
+        }
+        else {
+            displayBox->Text = "Invalid Input";
+            return;
+        }
+    }
+ 
 
     //jika angka kedua tidak ada
     if (parts->Length < 3 || String::IsNullOrWhiteSpace(parts[2])) {
@@ -645,10 +697,6 @@ private: System::Void equalButton_Click(System::Object^ sender, System::EventArg
     //error handling
 
 
-    
-
-
-
     double result;
     if (operation == "+") {
         result = firstnumber + secondnumber;
@@ -670,7 +718,12 @@ private: System::Void equalButton_Click(System::Object^ sender, System::EventArg
     }
 
     displayBox->Text = result.ToString(); // Tampilkan hasil
+
+
 }
+
+
+
 
 private: System::Void clearButton_Click(System::Object^ sender, System::EventArgs^ e) {
     displayBox->Clear(); // Bersihkan displayBox
@@ -681,10 +734,11 @@ private: System::Void clearButton_Click(System::Object^ sender, System::EventArg
 
 private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e) {
 }
-private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
-}
+
 private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 
+private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+}
 };
 }
