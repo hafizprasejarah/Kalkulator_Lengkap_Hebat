@@ -693,7 +693,6 @@ private: System::Void equalButton_Click(System::Object^ sender, System::EventArg
     }
    
 
-
     //error handling
 
 
