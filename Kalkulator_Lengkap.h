@@ -651,7 +651,7 @@ private: System::Void equalButton_Click(System::Object^ sender, System::EventArg
             System::String^ operatorPart = parts2[i];
             double kanan = Double::Parse(parts2[i + 1]);
 
-            if (operatorPart == "+") {
+            if (operatorPart == "+") { 
                 result += kanan;
             }
             else if (operatorPart == "-") {
