@@ -521,8 +521,6 @@ private: System::Void equalButton_Click(System::Object^ sender, System::EventArg
     if (parts [0] == "Tan" || parts[0] == "Cos" || parts[0] == "Sin") {
         if (parts->Length == 2 && parts[1] != "") {
 
-            double radian = Double::Parse(parts[1]) * M_PI / 180.0; //Rumus radian
-            double hasil;
 
             if (parts[0] == "Sin") hasil = sin(radian);
             else if (parts[0] == "Cos") hasil = cos(radian);
