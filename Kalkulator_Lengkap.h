@@ -51,6 +51,10 @@ namespace Project1 {
             this->TanBtn->Click += gcnew System::EventHandler(this, &MyForm::Trigonometri_Click);
             this->InversBtn->Click += gcnew System::EventHandler(this, &MyForm::Trigonometri_Click);
 
+            // Menghubungkan event handler ke tombol "."
+            this->PointButton->Click += gcnew System::EventHandler(this, &MyForm::Point_Click);
+
+
         }
 
     protected:
@@ -68,6 +72,7 @@ namespace Project1 {
         String^ operation;
         String^ firstchar;
         String^ trigonometri;
+        String^ koma;
 
     private: System::Windows::Forms::Button^ btnClear;
     private: System::Windows::Forms::Button^ btnEqual;
@@ -98,7 +103,8 @@ namespace Project1 {
 
     private: System::Windows::Forms::Button^ button6;
     private: System::Windows::Forms::Button^ button7;
-    private: System::Windows::Forms::Button^ button8;
+    private: System::Windows::Forms::Button^ PointButton;
+
     private: System::Windows::Forms::Panel^ panel1;
 
 
@@ -181,7 +187,7 @@ namespace Project1 {
             this->InversBtn = (gcnew System::Windows::Forms::Button());
             this->button6 = (gcnew System::Windows::Forms::Button());
             this->button7 = (gcnew System::Windows::Forms::Button());
-            this->button8 = (gcnew System::Windows::Forms::Button());
+            this->PointButton = (gcnew System::Windows::Forms::Button());
             this->panel1 = (gcnew System::Windows::Forms::Panel());
             this->panel1->SuspendLayout();
             this->SuspendLayout();
@@ -430,20 +436,20 @@ namespace Project1 {
             this->button7->TabIndex = 23;
             this->button7->Text = L"^";
             // 
-            // button8
+            // PointButton
             // 
-            this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 8, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->PointButton->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 8, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(0)));
-            this->button8->Location = System::Drawing::Point(70, 293);
-            this->button8->Name = L"button8";
-            this->button8->Size = System::Drawing::Size(50, 50);
-            this->button8->TabIndex = 24;
-            this->button8->Text = L".";
+            this->PointButton->Location = System::Drawing::Point(70, 293);
+            this->PointButton->Name = L"PointButton";
+            this->PointButton->Size = System::Drawing::Size(50, 50);
+            this->PointButton->TabIndex = 24;
+            this->PointButton->Text = L",";
             // 
             // panel1
             // 
             this->panel1->BackColor = System::Drawing::SystemColors::ControlLight;
-            this->panel1->Controls->Add(this->button8);
+            this->panel1->Controls->Add(this->PointButton);
             this->panel1->Controls->Add(this->button7);
             this->panel1->Controls->Add(this->button6);
             this->panel1->Controls->Add(this->InversBtn);
@@ -496,57 +502,79 @@ namespace Project1 {
 
 private: System::Void numberButton_Click(System::Object^ sender, System::EventArgs^ e) {
     Button^ button = safe_cast<Button^>(sender);
+    if (displayBox->Text == "Error" || displayBox->Text == "Invalid Input" || displayBox->Text == "Input string was not in a correct format.")
+    {
+        displayBox->Text = "";
+    }
     displayBox->Text += button->Text;   // Menambahkan angka ke displayBox
 }
     
 
 private: System::Void operationButton_Click(System::Object^ sender, System::EventArgs^ e) {
     Button^ button = safe_cast<Button^>(sender);
+    if (displayBox->Text == "Error" || displayBox->Text == "Invalid Input" || displayBox->Text == "Input string was not in a correct format.")
+    {
+        displayBox->Text = "";
+    }
      firstchar = displayBox->Text;
      operation = button->Text; // Simpan operasi
      displayBox->Text += " " + operation + " "; // Tampilkan operasi di displayBox
 }
 
 private: System::Void Trigonometri_Click(System::Object^ sender, System::EventArgs^ e) {
+    if (displayBox->Text == "Error" || displayBox->Text == "Invalid Input" || displayBox->Text == "Input string was not in a correct format.")
+    {
+        displayBox->Text = "";
+    }
     Button^ button = safe_cast<Button^>(sender);
     trigonometri = button->Text; // Simpan Trigonometri ke dalam variav
     displayBox->Text += trigonometri + " "; // Tampilkan operasi di displayBox
+
+}
+private: System::Void Point_Click(System::Object^ sender, System::EventArgs^ e) {
+    if (displayBox->Text == "Error" || displayBox->Text == "Invalid Input" || displayBox->Text == "Input string was not in a correct format.")
+    {
+        displayBox->Text = "";
+    }
+    Button^ button = safe_cast<Button^>(sender);
+    koma = button->Text; // Simpan Trigonometri ke dalam variav
+    displayBox->Text += koma; // Tampilkan operasi di displayBox
 
 }
 
 private: System::Void equalButton_Click(System::Object^ sender, System::EventArgs^ e) {
     //Ambil dan pisahkan angka dan operasi dengan spasi (' ') dan menyimpannya sebagai array 
     array<String^>^ parts = displayBox->Text->Split(' ');
+    bool apakahTrigonometri = false;
+    bool logaritma = false;
+    bool akar = false;
+    bool pangkat = false;
+    bool operasiBiasa = false;
 
-    if (parts [0] == "Tan" || parts[0] == "Cos" || parts[0] == "Sin") {
-        if (parts->Length == 2 && parts[1] != "") {
-
-
-            if (parts[0] == "Sin") hasil = sin(radian);
-            else if (parts[0] == "Cos") hasil = cos(radian);
-            else if (parts[0] == "Tan") hasil = tan(radian);
-
-            displayBox->Text = hasil.ToString();
-
-            return;
+    for each (String ^ bagian in parts) {
+        if (bagian == "Sin" || bagian == "Cos" || bagian == "Tan" || bagian == "Inv") {
+            apakahTrigonometri = true;
+            break; // Tidak perlu lanjutkan jika sudah ditemukan
         }
-        else {
-            displayBox->Text = "Invalid Input";
-            return;
+        else if (bagian == "+" || bagian == "-" || bagian == "*" || bagian == "/" ){
+            operasiBiasa = true;
+            break;
         }
-
     }
-    else if (parts[0] == "Inv") {
-        if (parts->Length == 3 && parts[2] != "")
-        {   
-            int derajat = Double::Parse(parts[2]);
-            double radian = derajat * M_PI / 180.0; //Rumus radian
-            double hasil;
 
-            if(derajat >= -1.0 && derajat <= 1.0){
-                if (parts[0] + parts[1] == "InvSin") hasil = asin(radian);
-                else if (parts[0] + parts[1] == "InvCos") hasil = acos(radian);
-                else if (parts[0] + parts[1] == "InvTan") hasil = atan(radian);
+    if (apakahTrigonometri) {
+
+      
+        if (parts[0] == "Tan" || parts[0] == "Cos" || parts[0] == "Sin") {
+            if (parts->Length == 2 && parts[1] != "") {
+
+                double radian = Double::Parse(parts[1]) * M_PI / 180.0; //Rumus radian
+                double hasil;
+
+                if (parts[0] == "Sin") hasil = sin(radian);
+                else if (parts[0] == "Cos") hasil = cos(radian);
+                else if (parts[0] == "Tan") hasil = tan(radian);
+
                 displayBox->Text = hasil.ToString();
 
                 return;
@@ -556,168 +584,217 @@ private: System::Void equalButton_Click(System::Object^ sender, System::EventArg
                 return;
             }
 
-           
         }
-        else {
-            displayBox->Text = "Invalid Input";
-            return;
-        }
-    }
- 
+        else if (parts[0] == "Inv") {
+            if (parts->Length == 3 && parts[2] != "")
+            {
+                double nilai = Double::Parse(parts[2]);
+                double hasil;
 
-    //jika angka kedua tidak ada
-    if (parts->Length < 3 || String::IsNullOrWhiteSpace(parts[2])) {
-        displayBox->Text = "Error";
-        return;
-    }
+                if (nilai >= -1.0 && nilai <= 1.0) {
+                    if (parts[0] + parts[1] == "InvSin") hasil = asin(nilai);
+                    else if (parts[0] + parts[1] == "InvCos") hasil = acos(nilai);
+                    else if (parts[0] + parts[1] == "InvTan") hasil = atan(nilai);
 
-    //jika variabel yang di hitung lebih dari 2
-    if (parts->Length > 3 && parts[0] != "") {
-           
-            double result = 0;
-            int arrayLength = parts->Length;
-           Generic::List<System::String^>^ parts2 = gcnew Generic::List<System::String^>();
+                    double sudut = hasil * (180.0/M_PI); //Rumus radian
+                    displayBox->Text = sudut.ToString();
 
-            // Langkah 1: Proses perkalian (*) dan pembagian (/)
-            for (size_t i = 0; i < arrayLength; i++) {
-                System::String^ part = parts[i];
-
-                if (part == "*") {
-                    double kiri = Double::Parse(parts2[parts2->Count - 1]);
-                    double kanan = Double::Parse(parts[++i]);
-                    parts2[parts2->Count - 1] = (kiri * kanan).ToString();
-                }
-                else if (part == "/") {
-                    double kiri = Double::Parse(parts2[parts2->Count - 1]);
-                    double kanan = Double::Parse(parts[++i]);
-                    parts2[parts2->Count - 1] = (kiri / kanan).ToString();
+                    return;
                 }
                 else {
-                    parts2->Add(part);  // Tambahkan angka atau operator
+                    displayBox->Text = "Invalid Input";
+                    return;
                 }
-            }
 
-            // Langkah 2: Proses penjumlahan (+) dan pengurangann (-)
-            result = Double::Parse(parts2[0]); /*mengabil angka pertama dari "parts2"*/
-            for (size_t i = 1; i < parts2->Count; i += 2) {
-                System::String^ operation = parts2[i]; /*menyimpan operasi yang di iterasi kedala variabel*/
-                double kanan = Double::Parse(parts2[i + 1]);
 
-                if (operation == "+") {
-                    result += kanan;
-                }
-                else if (operation == "-") {
-                    result -= kanan;
-                }
-            }
-
-            // Tampilkan hasil di displayBox
-            displayBox->Text = result.ToString();
-            return;
-    }
-    //jika angka pertama dalam perhitungan adala - dan variabel nnya lebih dari 2
-    else if (parts->Length > 5 && parts[1] == "-" && parts[0] == "") {
-        double result = 0;
-        int arrayLength = parts->Length;
-       
-
-        Generic::List<System::String^>^ parts2 = gcnew Generic::List<System::String^>();
-
-        // Langkah 1: Proses perkalian (*) dan pembagian (/)
-        for (size_t i = 1; i < arrayLength; i++) {
-            System::String^ part = parts[i];
-
-            if (part == "*") {
-                double kiri = Double::Parse(parts2[parts2->Count - 1]);
-                double kanan = Double::Parse(parts[++i]);
-                parts2[parts2->Count - 1] = (kiri * kanan).ToString();
-            }
-            else if (part == "/") {
-                double kiri = Double::Parse(parts2[parts2->Count - 1]);
-                double kanan = Double::Parse(parts[++i]);
-                parts2[parts2->Count - 1] = (kiri / kanan).ToString();
             }
             else {
-                parts2->Add(part);  // Tambahkan angka atau operator
+                displayBox->Text = "Invalid Input";
+                return;
             }
         }
 
-        // Langkah 2: Proses penjumlahan (+) dan pengurangan (-)
-
-        result = Double::Parse(parts2[0] + parts2[1]);
-        for (size_t i = 2; i < parts2->Count; i += 2) {
-            System::String^ operatorPart = parts2[i];
-            double kanan = Double::Parse(parts2[i + 1]);
-
-            if (operatorPart == "+") { 
-                result += kanan;
+    }else if(operasiBiasa) {
+        try
+        {
+            //jika angka kedua tidak ada
+            if (parts->Length < 3 || String::IsNullOrWhiteSpace(parts[2])) {
+                displayBox->Text = "Error";
+                return;
             }
-            else if (operatorPart == "-") {
-                result -= kanan;
+
+            //jika variabel yang di hitung lebih dari 2
+            if (parts->Length > 3 && parts[0] != "") {
+
+                double result = 0;
+                int arrayLength = parts->Length;
+                Generic::List<System::String^>^ parts2 = gcnew Generic::List<System::String^>();
+
+                // Langkah 1: Proses perkalian (*) dan pembagian (/)
+                for (size_t i = 0; i < arrayLength; i++) {
+                    System::String^ part = parts[i];
+
+                    if (part == "*") {
+                        double kiri = Double::Parse(parts2[parts2->Count - 1]);
+                        double kanan = Double::Parse(parts[++i]);
+                        parts2[parts2->Count - 1] = (kiri * kanan).ToString();
+                    }
+                    else if (part == "/") {
+                        double kiri = Double::Parse(parts2[parts2->Count - 1]);
+                        double kanan = Double::Parse(parts[++i]);
+                        parts2[parts2->Count - 1] = (kiri / kanan).ToString();
+                    }
+                    else {
+                        parts2->Add(part);  // Tambahkan angka atau operator
+                    }
+                }
+
+                // Langkah 2: Proses penjumlahan (+) dan pengurangann (-)
+                result = Double::Parse(parts2[0]); /*mengabil angka pertama dari "parts2"*/
+                for (size_t i = 1; i < parts2->Count; i += 2) {
+                    System::String^ operation = parts2[i]; /*menyimpan operasi yang di iterasi kedala variabel*/
+                    double kanan = Double::Parse(parts2[i + 1]);
+
+                    if (operation == "+") {
+                        result += kanan;
+                    }
+                    else if (operation == "-") {
+                        result -= kanan;
+                    }
+                }
+
+                // Tampilkan hasil di displayBox
+                displayBox->Text = result.ToString();
+                return;
             }
+            //jika angka pertama dalam perhitungan adala - dan variabel nnya lebih dari 2
+            else if (parts->Length > 5 && parts[1] == "-" && parts[0] == "") {
+                double result = 0;
+                int arrayLength = parts->Length;
+
+
+                Generic::List<System::String^>^ parts2 = gcnew Generic::List<System::String^>();
+
+                // Langkah 1: Proses perkalian (*) dan pembagian (/)
+                for (size_t i = 1; i < arrayLength; i++) {
+                    System::String^ part = parts[i];
+
+                    if (part == "*") {
+                        double kiri = Double::Parse(parts2[parts2->Count - 1]);
+                        double kanan = Double::Parse(parts[++i]);
+                        parts2[parts2->Count - 1] = (kiri * kanan).ToString();
+                    }
+                    else if (part == "/") {
+                        double kiri = Double::Parse(parts2[parts2->Count - 1]);
+                        double kanan = Double::Parse(parts[++i]);
+                        parts2[parts2->Count - 1] = (kiri / kanan).ToString();
+                    }
+                    else {
+                        parts2->Add(part);  // Tambahkan angka atau operator
+                    }
+                }
+
+                // Langkah 2: Proses penjumlahan (+) dan pengurangan (-)
+
+                result = Double::Parse(parts2[0] + parts2[1]);
+                for (size_t i = 2; i < parts2->Count; i += 2) {
+                    System::String^ operatorPart = parts2[i];
+                    double kanan = Double::Parse(parts2[i + 1]);
+
+                    if (operatorPart == "+") {
+                        result += kanan;
+                    }
+                    else if (operatorPart == "-") {
+                        result -= kanan;
+                    }
+                }
+
+                // Tampilkan hasil di displayBox
+                displayBox->Text = result.ToString();
+                return;
+            }
+
+
+
+            if (parts[0] == "" && parts[1] == "-") {
+
+                //untuk mendapatkan variabel pertama untuk di kalkulasi, jika angka pertama adalah minus
+                parts[0] = parts[1] + parts[2];
+                int arrayLength = parts->Length;
+                if (arrayLength <= 3) {
+                    displayBox->Text = parts[0];
+                }
+                else {
+                    firstnumber = Double::Parse(parts[0]);
+                    operation = parts[3];
+                    secondnumber = Double::Parse(parts[4]);
+
+                }
+
+
+            }
+            else if (parts[0] != "") {
+                firstnumber = Double::Parse(parts[0]);
+                operation = parts[1];
+                secondnumber = Double::Parse(parts[2]);
+            }
+            else {
+                displayBox->Text = "Error";
+            }
+
+
+            //error handling
+
+
+            double result;
+            if (operation == "+") {
+                result = firstnumber + secondnumber;
+            }
+            else if (operation == "-") {
+                result = firstnumber - secondnumber;
+            }
+            else if (operation == "*") {
+                result = firstnumber * secondnumber;
+            }
+            else if (operation == "/") {
+                if (secondnumber != 0) {
+                    result = firstnumber / secondnumber;
+                }
+                else {
+                    displayBox->Text = "Error";
+                    return;
+                }
+            }
+
+            displayBox->Text = result.ToString(); // Tampilkan hasil
+
+
         }
-
-        // Tampilkan hasil di displayBox
-        displayBox->Text = result.ToString();
-        return;
-    }
-
-    
-
-    if ( parts[0] == "" && parts[1] == "-" ) {
-
-        //untuk mendapatkan variabel pertama untuk di kalkulasi, jika angka pertama adalah minus
-        parts[0] = parts[1]+parts[2];
-        int arrayLength = parts->Length;
-        if (arrayLength<=3) {
-            displayBox->Text = parts[0];
-        }
-        else {
-            firstnumber = Double::Parse(parts[0]);
-            operation = parts[3];
-            secondnumber = Double::Parse(parts[4]);
-
-        }
-        
-        
-    }
-    else if(parts[0] !="") {
-        firstnumber = Double::Parse(parts[0]);
-        operation = parts[1];
-        secondnumber = Double::Parse(parts[2]);
-    }
-    else {
-        displayBox->Text = "Error";
-    }
-   
-
-    //error handling
-
-
-    double result;
-    if (operation == "+") {
-        result = firstnumber + secondnumber;
-    }
-    else if (operation == "-") {
-        result = firstnumber - secondnumber;
-    }
-    else if (operation == "*") {
-        result = firstnumber * secondnumber;
-    }
-    else if (operation == "/") {
-        if (secondnumber != 0) {
-            result = firstnumber / secondnumber;
-        }
-        else {
-            displayBox->Text = "Error";
+        catch (Exception^ ex)
+        {
+            displayBox->Text = ex->Message; // Tampilkan hasil
             return;
         }
+
+
+    }else if (logaritma) {
+
+
     }
-
-    displayBox->Text = result.ToString(); // Tampilkan hasil
-
-
+    else if (pangkat) {
+    
+    
+    }
+    else if (akar) {
+    
+    }
+    
 }
+
+    
+ 
+
+    
 
 
 
