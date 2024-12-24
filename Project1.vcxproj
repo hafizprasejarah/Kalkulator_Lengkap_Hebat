@@ -82,6 +82,8 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies />
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -122,13 +124,13 @@
     <ClCompile Include="Kalkulator_Lengkap.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Kalkulator_Lengkap.h">
+    <ClInclude Include="Kalkulator1.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Kalkulator_Lengkap.resx">
-      <DependentUpon>Kalkulator_Lengkap.h</DependentUpon>
+    <EmbeddedResource Include="Kalkulator1.resx">
+      <DependentUpon>Kalkulator1.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

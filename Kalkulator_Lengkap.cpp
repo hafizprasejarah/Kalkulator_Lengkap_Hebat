@@ -1,4 +1,5 @@
-#include "Kalkulator_Lengkap.h"
+
+#include "Kalkulator1.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -7,7 +8,7 @@ using namespace System::Windows::Forms;
 		void main() {
 		Application::SetCompatibleTextRenderingDefault(false);
 		Application::EnableVisualStyles();
-		Project1::MyForm frm;
+		Kalkulator1::Main frm;
 		Application::Run(% frm);
 
 	}

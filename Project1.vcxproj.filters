@@ -20,8 +20,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Kalkulator_Lengkap.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Kalkulator1.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
